@@ -1,0 +1,14 @@
+tests:
+  - description: "pyproject.toml edits made by Renovate or by hand should not be reported as drift"
+    configuration:
+      tasks: [checkPyproject, poeDocs]
+    expectation:
+      success: [checkPyproject, poeDocs]
+      output_contains: ["documentation generated"]
+  - description: "dependencies declared in Gradle but missing from pyproject.toml should be reported as drift"
+    configuration:
+      tasks: [checkPyproject]
+      options: [-PaddDependency=true]
+    expectation:
+      failure: [checkPyproject]
+      output_contains: ['+    "tomli>=2.0",', "out of sync"]

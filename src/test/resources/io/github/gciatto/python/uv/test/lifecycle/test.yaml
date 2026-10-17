@@ -1,0 +1,47 @@
+tests:
+  - description: "pyproject.toml should be generated from the Gradle configuration, and be in sync afterwards"
+    configuration:
+      tasks: [generatePyproject, checkPyproject]
+      options: [--stacktrace]
+    expectation:
+      success: [generatePyproject, checkPyproject]
+      file_exists:
+        - name: pyproject.toml
+          findRegex:
+            - 'name = "demo-project"'
+            - 'version = "1\.2\.3\.dev4"'
+            - 'description = "A demo Python project operated by Gradle"'
+            - 'license = "Apache-2\.0"'
+            - '    \{name = "Giovanni Ciatto", email = "giovanni\.ciatto@unibo\.it"\},'
+            - 'demo_project = "demo_project\.__main__:main"'
+            - '    "poethepoet>=.*",'
+            - 'module-name = "demo_project"'
+            - 'static-checks = \["compile", "format-check", "ruff-check", "mypy"\]'
+            - 'mypy = "mypy demo_project tests"'
+            - 'hello = .*'
+            - 'name = "testpypi"'
+            - 'target-version = "py310"'
+  - description: "build should sync the environment, run static checks and tests, and build the distributions"
+    configuration:
+      tasks: [build]
+      options: [--stacktrace, --configuration-cache]
+    expectation:
+      success: [generatePyproject, uvSync, poeCompile, poeStaticChecks, poeTest, checkPyproject, uvBuild, check, build]
+      output_contains: ["1 passed"]
+      file_exists:
+        - name: uv.lock
+        - name: build/python/dist/demo_project-1.2.3.dev4-py3-none-any.whl
+        - name: build/python/dist/demo_project-1.2.3.dev4.tar.gz
+  - description: "run should run the application"
+    configuration:
+      tasks: [run]
+      options: [--args=Gradle, --configuration-cache]
+    expectation:
+      success: [run]
+      output_contains: ["Hello, Gradle!"]
+  - description: "custom Poe tasks should be mapped onto Gradle tasks"
+    configuration:
+      tasks: [poeHello]
+    expectation:
+      success: [poeHello]
+      output_contains: ["hello from poe"]

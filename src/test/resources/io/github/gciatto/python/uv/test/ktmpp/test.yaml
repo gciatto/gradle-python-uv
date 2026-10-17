@@ -1,0 +1,14 @@
+tests:
+  - description: "kt-mpp should be able to apply the plugin to Python sub-projects, which inherit the root version"
+    configuration:
+      tasks: [check, assemble]
+      options: [--stacktrace]
+    expectation:
+      success: [py-lib:checkPyproject, py-lib:poeStaticChecks, py-lib:poeTest, py-lib:check, py-lib:uvBuild]
+      output_contains: ["1 passed"]
+      file_exists:
+        - name: py-lib/pyproject.toml
+          findRegex:
+            - 'name = "py-lib"'
+            - 'version = "2\.0\.0rc1"'
+        - name: py-lib/build/python/dist/py_lib-2.0.0rc1-py3-none-any.whl
