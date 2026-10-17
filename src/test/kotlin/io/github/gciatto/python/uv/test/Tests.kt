@@ -50,6 +50,7 @@ class Tests : StringSpec({
             println(result.output)
             test.expectation.output_contains.forEach { result.output shouldContain it }
             test.expectation.output_doesnt_contain.forEach { result.output shouldNotContain it }
+            test.expectation.output_matches.forEach { result.output shouldContain Regex(it, RegexOption.MULTILINE) }
             test.expectation.success.forEach { result.outcomeOf(it) shouldBe TaskOutcome.SUCCESS }
             test.expectation.failure.forEach { result.outcomeOf(it) shouldBe TaskOutcome.FAILED }
             test.expectation.file_exists.forEach {

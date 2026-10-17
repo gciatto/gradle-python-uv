@@ -26,6 +26,7 @@ data class Expectation(
     val failure: List<String> = emptyList(),
     val output_contains: List<String> = emptyList(),
     val output_doesnt_contain: List<String> = emptyList(),
+    val output_matches: List<String> = emptyList(),
 )
 
 enum class Permission(

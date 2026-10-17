@@ -5,7 +5,11 @@ tests:
       options: [-Ppython.uvProvisioning=ALWAYS, --configuration-cache]
     expectation:
       success: [uvInstall, uvSync]
-      output_contains: ["uv executable:", "python-uv", "uv 0.13.1"]
+      # version-agnostic: the pinned uv version is updated by Renovate
+      output_matches:
+        - 'uv executable: .*python-uv[/\\]uv[/\\]\d+\.\d+\.\d+[/\\]'
+        - '^\s*uv \d+\.\d+\.\d+'
+
   - description: "a missing explicit uv executable should be reported"
     configuration:
       tasks: [uvInstall]
