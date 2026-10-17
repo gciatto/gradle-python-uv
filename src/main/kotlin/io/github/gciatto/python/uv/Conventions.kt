@@ -25,7 +25,7 @@ internal object Conventions {
     private val devDependencies =
         listOf(
             "coverage>=7.14.0",
-            "mypy>=2.1.0",
+            "mypy>=2.3.1",
             "poethepoet>=0.45.0",
             "pytest>=9.0.3",
             "ruff>=0.15.12",
