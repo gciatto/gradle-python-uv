@@ -27,5 +27,17 @@
          "depNameTemplate": "uv",
          "datasourceTemplate": "pypi"
       }
+   ],
+   "packageRules": [
+      {
+         "description": "Python dependencies of test fixtures are pinned on purpose",
+         "matchFileNames": [
+            "src/test/resources/**"
+         ],
+         "matchManagers": [
+            "pep621"
+         ],
+         "enabled": false
+      }
    ]
 }
