@@ -12,5 +12,7 @@ python {
         author("Giovanni Ciatto", "giovanni.ciatto@unibo.it")
         keywords.addAll("demo", "gradle")
         poeTask("hello", "python -c \"print('hello from poe')\"")
+        // install the lower bounds of direct dependencies, so that new tool releases cannot break the test
+        tool("uv", mapOf("resolution" to "lowest-direct"))
     }
 }

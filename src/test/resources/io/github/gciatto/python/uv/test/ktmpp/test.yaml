@@ -11,4 +11,5 @@ tests:
           findRegex:
             - 'name = "py-lib"'
             - 'version = "2\.0\.0rc1"'
+            - 'resolution = "lowest-direct"'
         - name: py-lib/build/python/dist/py_lib-2.0.0rc1-py3-none-any.whl
