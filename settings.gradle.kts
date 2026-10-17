@@ -20,4 +20,4 @@ gitHooks {
     createHooks(true)
 }
 
-rootProject.name = "template-for-gradle-plugins"
+rootProject.name = "gradle-python-uv"

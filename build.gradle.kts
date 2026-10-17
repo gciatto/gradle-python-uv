@@ -18,16 +18,17 @@ plugins {
 /*
  * Project information
  */
-group = "org.danilopianini"
-description = "A template repository for kickstarting Gradle Plugins"
+group = "io.github.gciatto"
+description = "Gradle plugin operating Python projects via uv and Poe the Poet"
 
 class ProjectInfo {
-    val longName = "Template for Gradle Plugins"
-    val website = "https://github.com/DanySK/$name"
+    val longName = "Python via uv for Gradle"
+    val website = "https://github.com/gciatto/$name"
     val vcsUrl = "$website.git"
     val scm = "scm:git:$website.git"
-    val pluginImplementationClass = "$group.template.HelloGradle"
-    val tags = listOf("template", "kickstart", "example")
+    val pluginId = "$group.python-uv"
+    val pluginImplementationClass = "$group.python.uv.PythonUvPlugin"
+    val tags = listOf("python", "uv", "poe", "pypi", "multiplatform")
 }
 val info = ProjectInfo()
 
@@ -47,6 +48,7 @@ multiJvm {
 dependencies {
     api(gradleApi())
     api(gradleKotlinDsl())
+    implementation(libs.tomlj)
     testImplementation(gradleTestKit())
     testImplementation(libs.apache.commons.lang3)
     testImplementation(libs.konf.yaml)
@@ -103,8 +105,8 @@ publishOnCentral {
     projectDescription.set(description ?: TODO("Missing description"))
     projectUrl.set(info.website)
     scmConnection.set(info.scm)
-    repository("https://maven.pkg.github.com/DanySK/${rootProject.name}".lowercase(), name = "github") {
-        user.set("danysk")
+    repository("https://maven.pkg.github.com/gciatto/${rootProject.name}".lowercase(), name = "github") {
+        user.set("gciatto")
         password.set(System.getenv("GITHUB_TOKEN"))
     }
     publishing {
@@ -129,7 +131,7 @@ gradlePlugin {
         website.set(info.website)
         vcsUrl.set(info.vcsUrl)
         create("") {
-            id = "$group.${project.name}"
+            id = info.pluginId
             displayName = info.longName
             description = project.description
             implementationClass = info.pluginImplementationClass
