@@ -1,0 +1,15 @@
+tests:
+  - description: "with python.uvProvisioning=ALWAYS, the pinned uv should be downloaded and used"
+    configuration:
+      tasks: [uvInstall, uvSync]
+      options: [-Ppython.uvProvisioning=ALWAYS, --configuration-cache]
+    expectation:
+      success: [uvInstall, uvSync]
+      output_contains: ["uv executable:", "python-uv", "uv 0.13.1"]
+  - description: "a missing explicit uv executable should be reported"
+    configuration:
+      tasks: [uvInstall]
+      options: [-Ppython.uvExecutable=missing-uv-executable]
+    expectation:
+      failure: [uvInstall]
+      output_contains: ["The configured uv executable 'missing-uv-executable' was not found"]
