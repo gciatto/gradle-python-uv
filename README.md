@@ -11,9 +11,9 @@ JVM/JS/multi-platform ones, e.g. in [kt-mpp](https://github.com/gciatto/kt-mpp) 
 
 ## Requirements
 
-- [uv](https://docs.astral.sh/uv/getting-started/installation/) on the `PATH`
-  (or configured via `python.uvExecutable`). uv provisions Python itself.
 - Gradle 9+, Java 17+.
+- Nothing else: an installed [uv](https://docs.astral.sh/uv/) is used if found, otherwise the plugin
+  downloads a pinned one (see [uv provisioning](#uv-provisioning)). uv provisions Python itself.
 
 ## Quick start
 
@@ -78,12 +78,45 @@ Instead, `uvBuild` stages the sources in `build/python/staging`, sets the versio
 [PEP 440](https://peps.python.org/pep-0440/) ones, e.g. `1.2.4-dev05-abc1234` → `1.2.4.dev5`,
 `2.0.0-rc.1` → `2.0.0rc1` (local labels are dropped, as PyPI rejects them).
 
+## uv provisioning
+
+The uv executable is resolved once per build, at execution time, as follows:
+
+1. `python.uvExecutable`, if set (also via the `python.uvExecutable` Gradle property or the `UV_EXECUTABLE`
+   environment variable): either a path (absolute, or relative to the project directory),
+   or a command name, looked up as in step 2;
+2. unless `python.uvProvisioning = ALWAYS`, an installed uv, looked up in `PATH` (case-insensitively, with
+   `uv.exe` on Windows) and then in the directories where installers and package managers put it, which may
+   be missing from the `PATH` of IDEs launched from the desktop: `$UV_INSTALL_DIR`, `$XDG_BIN_HOME`,
+   `~/.local/bin`, `$CARGO_HOME/bin`, `~/.cargo/bin`, WinGet/Scoop/Chocolatey directories on Windows,
+   Homebrew/MacPorts directories on macOS, `/usr/local/bin`, `/usr/bin`, `/snap/bin` on Linux;
+3. unless `python.uvProvisioning = NEVER`, the pinned uv version (`python.uvVersion`), downloaded once into
+   `~/.gradle/caches/python-uv/uv/<version>/<platform>/` and shared by all projects.
+
+uv is downloaded as the platform-specific wheel it publishes on PyPI (Linux glibc/musl, macOS, and Windows,
+on x86_64, aarch64, and other architectures), via the standard "simple" index API, so PyPI mirrors work too.
+The wheel is verified against the SHA-256 published by the index. Downloads honour the JVM proxy settings
+(e.g. `systemProp.https.proxyHost` in `gradle.properties`).
+
+| Setting | Gradle property | Default |
+|---|---|---|
+| `uvExecutable` | `python.uvExecutable` | `UV_EXECUTABLE`, or unset |
+| `uvProvisioning` (`AUTO`, `ALWAYS`, `NEVER`) | `python.uvProvisioning` | `AUTO` |
+| `uvVersion` | `python.uvVersion` | pinned, updated by Renovate |
+| `uvIndexUrl` | `python.uvIndexUrl` | `UV_DEFAULT_INDEX`, `UV_INDEX_URL`, `PIP_INDEX_URL`, or `https://pypi.org/simple` |
+| `uvCacheDirectory` | | `<Gradle user home>/caches/python-uv/uv` |
+
+`./gradlew uvInstall` resolves (and possibly downloads) uv, printing its location and version.
+Use `python.uvProvisioning = ALWAYS` for reproducible builds (everyone uses the same uv version),
+and `NEVER` on offline or locked-down machines.
+
 ## Tasks
 
 | Gradle task | What it does |
 |---|---|
 | `generatePyproject` | Merges the Gradle configuration into `pyproject.toml` (run it manually, commit the result) |
 | `checkPyproject` | Fails if `pyproject.toml` is out of sync with the Gradle configuration |
+| `uvInstall` | Resolves uv (downloading it if needed), printing its location and version |
 | `uvPythonInstall` | `uv python install <pythonVersion> <testedPythonVersions...>` |
 | `uvLock` | `uv lock` |
 | `uvSync` | `uv sync` (`--locked` on CI); generates `pyproject.toml` first if missing |
@@ -118,7 +151,9 @@ python {
 
 ```kotlin
 python {
-    uvExecutable = "uv"                              // default: uv on the PATH
+    uvExecutable = "/opt/uv/bin/uv"                  // default: unset (see "uv provisioning")
+    uvProvisioning = UvProvisioning.ALWAYS           // import io.github.gciatto.python.uv.UvProvisioning
+    uvVersion = "0.13.1"
     pythonVersion = "3.12"                           // default: content of .python-version
     testedPythonVersions("3.10", "3.11", "3.12", "3.13")
     pyprojectFile = layout.projectDirectory.file("pyproject.toml")
@@ -224,7 +259,7 @@ Bumping a version in Gradle (or adding/removing dependencies there) requires reg
 ## Development
 
 ```bash
-./gradlew build     # compiles, runs ktlint/detekt, and tests (TestKit tests require uv)
+./gradlew build     # compiles, runs ktlint/detekt, and tests (TestKit tests require network access to PyPI)
 ```
 
 Functional tests live in `src/test/resources/**/test.yaml` (one Gradle project per directory).
