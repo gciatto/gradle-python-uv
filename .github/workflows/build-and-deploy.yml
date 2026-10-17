@@ -13,6 +13,11 @@ jobs:
     steps:
       - name: Checkout
         uses: DanySK/action-checkout@0.2.31
+      - name: Install uv (required by the plugin tests)
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: '**/pyproject.toml'
       - name: Determine dry-run flag
         id: check_branch
         shell: bash
