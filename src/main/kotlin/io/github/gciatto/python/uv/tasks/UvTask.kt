@@ -1,6 +1,7 @@
 package io.github.gciatto.python.uv.tasks
 
-import java.io.ByteArrayOutputStream
+import io.github.gciatto.python.uv.UvProvisioning
+import io.github.gciatto.python.uv.provisioning.UvResolver
 import java.io.File
 import javax.inject.Inject
 import org.gradle.api.DefaultTask
@@ -11,6 +12,7 @@ import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import org.gradle.process.ExecResult
@@ -19,12 +21,30 @@ import org.gradle.work.DisableCachingByDefault
 
 /**
  * Base class for tasks invoking uv.
+ * The uv executable is resolved at execution time (see [UvResolver]), and downloaded if needed.
  */
 @DisableCachingByDefault(because = "Runs an external process")
 abstract class UvTask : DefaultTask() {
-    /** The uv executable. */
+    /** The configured uv executable (path or command name), if any. */
     @get:Input
+    @get:Optional
     abstract val uvExecutable: Property<String>
+
+    /** How uv is obtained when [uvExecutable] is not set. */
+    @get:Input
+    abstract val uvProvisioning: Property<UvProvisioning>
+
+    /** The uv version to download, if needed. */
+    @get:Input
+    abstract val uvVersion: Property<String>
+
+    /** The (simple) package index uv is downloaded from, if needed. */
+    @get:Input
+    abstract val uvIndexUrl: Property<String>
+
+    /** Where downloaded uv versions are stored. */
+    @get:Internal
+    abstract val uvCacheDirectory: DirectoryProperty
 
     /** The directory uv is run from (i.e. the Python project directory). */
     @get:Internal
@@ -38,6 +58,19 @@ abstract class UvTask : DefaultTask() {
     @get:Inject
     protected abstract val execOperations: ExecOperations
 
+    /** Resolves the uv executable, downloading it if needed. */
+    protected fun resolveUv(): File = UvResolver.resolve(
+        UvResolver.Request(
+            explicitExecutable = uvExecutable.orNull,
+            provisioning = uvProvisioning.get(),
+            version = uvVersion.get(),
+            indexUrl = uvIndexUrl.get(),
+            cacheDirectory = uvCacheDirectory.get().asFile,
+            baseDirectory = workingDirectory.get().asFile,
+        ),
+        logger,
+    )
+
     /**
      * Runs uv with the given [arguments].
      * If [ignoreExitValue] is true, the caller is responsible for checking the result.
@@ -48,7 +81,7 @@ abstract class UvTask : DefaultTask() {
         extraEnvironment: Map<String, String> = emptyMap(),
         ignoreExitValue: Boolean = false,
     ): ExecResult {
-        val command = listOf(uvExecutable.get()) + arguments
+        val command = listOf(resolveUv().absolutePath) + arguments
         logger.info("Running {} in {}", command, directory)
         return try {
             execOperations.exec { spec ->
@@ -58,25 +91,9 @@ abstract class UvTask : DefaultTask() {
                 spec.isIgnoreExitValue = ignoreExitValue
             }
         } catch (e: ProcessExecutionException) {
-            throw GradleException(failureMessage(command, e), e)
+            throw GradleException("Command failed: ${command.joinToString(" ")}\n${e.message}", e)
         }
     }
-
-    private fun failureMessage(command: List<String>, e: Exception): String = if (isUvMissing()) {
-        "Cannot run '${uvExecutable.get()}': is uv installed? " +
-            "See https://docs.astral.sh/uv/getting-started/installation/, " +
-            "or set python.uvExecutable to its absolute path."
-    } else {
-        "Command failed: ${command.joinToString(" ")}\n${e.message}"
-    }
-
-    private fun isUvMissing(): Boolean = runCatching {
-        execOperations.exec { spec ->
-            spec.commandLine(uvExecutable.get(), "--version")
-            spec.standardOutput = ByteArrayOutputStream()
-            spec.isIgnoreExitValue = true
-        }
-    }.isFailure
 }
 
 /**
@@ -92,5 +109,18 @@ abstract class UvExec : UvTask() {
     @TaskAction
     fun execute() {
         runUv(arguments.get())
+    }
+}
+
+/**
+ * Makes uv available (downloading it, if needed and allowed), and prints its location and version.
+ */
+@DisableCachingByDefault(because = "uv is installed into the Gradle user home")
+abstract class UvInstall : UvTask() {
+    /** Resolves uv and prints its version. */
+    @TaskAction
+    fun install() {
+        logger.quiet("uv executable: {}", resolveUv())
+        runUv(listOf("--version"))
     }
 }

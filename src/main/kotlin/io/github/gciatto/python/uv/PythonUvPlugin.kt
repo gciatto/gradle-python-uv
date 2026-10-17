@@ -4,6 +4,7 @@ import io.github.gciatto.python.uv.tasks.PoeTask
 import io.github.gciatto.python.uv.tasks.SyncPyproject
 import io.github.gciatto.python.uv.tasks.UvBuild
 import io.github.gciatto.python.uv.tasks.UvExec
+import io.github.gciatto.python.uv.tasks.UvInstall
 import io.github.gciatto.python.uv.tasks.UvPublish
 import io.github.gciatto.python.uv.tasks.UvRun
 import io.github.gciatto.python.uv.tasks.UvSync
@@ -38,6 +39,10 @@ class PythonUvPlugin : Plugin<Project> {
         Conventions.apply(this, python)
         tasks.withType<UvTask>().configureEach {
             it.uvExecutable.convention(python.uvExecutable)
+            it.uvProvisioning.convention(python.uvProvisioning)
+            it.uvVersion.convention(python.uvVersion)
+            it.uvIndexUrl.convention(python.uvIndexUrl)
+            it.uvCacheDirectory.convention(python.uvCacheDirectory)
             it.workingDirectory.convention(layout.projectDirectory)
             it.environment.convention(emptyMap())
         }
@@ -93,6 +98,10 @@ class PythonUvPlugin : Plugin<Project> {
     ): TaskProvider<UvSync> {
         val directory = layout.projectDirectory
         val pyproject = python.pyprojectFile
+        tasks.register<UvInstall>("uvInstall") {
+            group = GROUP
+            description = "Makes uv available (downloading it if needed) and prints its location and version"
+        }
         tasks.register<UvExec>("uvPythonInstall") {
             group = GROUP
             description = "Installs the Python version(s) used by the project via uv"

@@ -11,6 +11,11 @@ import org.gradle.api.provider.Provider
  * such as [PyprojectSpec.devDependency] extend the defaults instead of replacing them.
  */
 internal object Conventions {
+    /** The uv version downloaded when no uv is installed (updated by Renovate). */
+    const val DEFAULT_UV_VERSION = "0.13.1"
+
+    private const val DEFAULT_INDEX_URL = "https://pypi.org/simple"
+
     private const val DEFAULT_REQUIRES_PYTHON = ">=3.10"
 
     private const val RUFF_LINE_LENGTH = 100
@@ -32,7 +37,23 @@ internal object Conventions {
         val providers = project.providers
         val directory = project.layout.projectDirectory
         with(python) {
-            uvExecutable.convention("uv")
+            uvExecutable.convention(
+                providers.gradleProperty("python.uvExecutable").orElse(providers.environmentVariable("UV_EXECUTABLE")),
+            )
+            uvProvisioning.convention(
+                providers.gradleProperty("python.uvProvisioning")
+                    .map { UvProvisioning.valueOf(it.trim().uppercase()) }
+                    .orElse(UvProvisioning.AUTO),
+            )
+            uvVersion.convention(providers.gradleProperty("python.uvVersion").orElse(DEFAULT_UV_VERSION))
+            uvIndexUrl.convention(
+                listOf("UV_DEFAULT_INDEX", "UV_INDEX_URL", "PIP_INDEX_URL")
+                    .fold(providers.gradleProperty("python.uvIndexUrl")) { url, variable ->
+                        url.orElse(providers.environmentVariable(variable))
+                    }.orElse(DEFAULT_INDEX_URL),
+            )
+            val cacheDirectory = project.gradle.gradleUserHomeDir.resolve("caches/python-uv/uv")
+            uvCacheDirectory.convention(project.layout.dir(providers.provider { cacheDirectory }))
             pythonVersion.convention(
                 providers.fileContents(directory.file(".python-version")).asText.map {
                     it.lineSequence().first().trim()
