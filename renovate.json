@@ -14,6 +14,18 @@
             "\"(?<depName>[A-Za-z0-9_.-]+)>=(?<currentValue>\\d[^\",<]*)\""
          ],
          "datasourceTemplate": "pypi"
+      },
+      {
+         "customType": "regex",
+         "description": "uv version downloaded by the plugin when uv is not installed",
+         "managerFilePatterns": [
+            "/^src/main/kotlin/.+/Conventions\\.kt$/"
+         ],
+         "matchStrings": [
+            "const val DEFAULT_UV_VERSION = \"(?<currentValue>[^\"]+)\""
+         ],
+         "depNameTemplate": "uv",
+         "datasourceTemplate": "pypi"
       }
    ]
 }
