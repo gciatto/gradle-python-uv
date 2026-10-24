@@ -12,7 +12,7 @@ import org.gradle.api.provider.Provider
  */
 internal object Conventions {
     /** The uv version downloaded when no uv is installed (updated by Renovate). */
-    const val DEFAULT_UV_VERSION = "0.13.1"
+    const val DEFAULT_UV_VERSION = "0.13.4"
 
     private const val DEFAULT_INDEX_URL = "https://pypi.org/simple"
 
