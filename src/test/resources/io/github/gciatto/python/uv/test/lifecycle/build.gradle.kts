@@ -7,6 +7,7 @@ version = "1.2.3-dev04-abc1234"
 description = "A demo Python project operated by Gradle"
 
 python {
+    locked = false // this fixture creates its environment without a committed lockfile
     pyproject {
         license = "Apache-2.0"
         author("Giovanni Ciatto", "giovanni.ciatto@unibo.it")

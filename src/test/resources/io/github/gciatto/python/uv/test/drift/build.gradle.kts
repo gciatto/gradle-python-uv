@@ -3,6 +3,7 @@ plugins {
 }
 
 python {
+    locked = false // this fixture creates its environment without a committed lockfile
     pyproject {
         description = "Drift detection"
         dependency("packaging>=24.0")
