@@ -13,7 +13,6 @@ import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.createTempDirectory
-import kotlin.io.path.writeText
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -21,10 +20,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class Tests : StringSpec({
-    val testkitProperties = javaClass.classLoader.getResource("testkit-gradle.properties")?.readText()
-    checkNotNull(testkitProperties) {
-        "No file testkit-gradle.properties was generated"
-    }
     val scan = ClassGraph().enableAllInfo().acceptPackages(Tests::class.java.`package`.name).scan()
     scan.getResourcesWithLeafName("test.yaml").flatMap { resource ->
         log.debug("Found test list in {}", resource)
@@ -36,7 +31,6 @@ class Tests : StringSpec({
         val testFolder = folder { location.copyRecursively(toFile()) }
         log.debug("Test has been copied into {} and is ready to get executed", testFolder)
         test.description {
-            testFolder.resolve("gradle.properties").writeText(testkitProperties)
             val result = GradleRunner.create()
                 .withProjectDir(testFolder.toFile())
                 .withPluginClasspath() // include the plugin into Gradle's build classpath for this run

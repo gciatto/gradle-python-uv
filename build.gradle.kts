@@ -7,10 +7,8 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.gitSemVer)
     alias(libs.plugins.gradlePluginPublish)
-    alias(libs.plugins.jacoco.testkit)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.qa)
-    alias(libs.plugins.publishOnCentral)
     alias(libs.plugins.multiJvmTesting)
     alias(libs.plugins.taskTree)
 }
@@ -25,7 +23,6 @@ class ProjectInfo {
     val longName = "Python via uv for Gradle"
     val website = "https://github.com/gciatto/$name"
     val vcsUrl = "$website.git"
-    val scm = "scm:git:$website.git"
     val pluginId = "$group.python-uv"
     val pluginImplementationClass = "$group.python.uv.PythonUvPlugin"
     val tags = listOf("python", "uv", "poe", "pypi", "multiplatform")
@@ -76,7 +73,6 @@ if (Os.isFamily(Os.FAMILY_WINDOWS)) {
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-    dependsOn(tasks.generateJacocoTestKitProperties)
     testLogging {
         showStandardStreams = true
         showCauses = true
@@ -86,43 +82,6 @@ tasks.withType<Test>().configureEach {
                 .values(),
         )
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-    }
-}
-
-signing {
-    if (System.getenv()["CI"].equals("true", ignoreCase = true)) {
-        val signingKey: String? by project
-        val signingPassword: String? by project
-        useInMemoryPgpKeys(signingKey, signingPassword)
-    }
-}
-
-/*
- * Publication on Maven Central and the Plugin portal
- */
-publishOnCentral {
-    projectLongName.set(info.longName)
-    projectDescription.set(description ?: TODO("Missing description"))
-    projectUrl.set(info.website)
-    scmConnection.set(info.scm)
-    repository("https://maven.pkg.github.com/gciatto/${rootProject.name}".lowercase(), name = "github") {
-        user.set("gciatto")
-        password.set(System.getenv("GITHUB_TOKEN"))
-    }
-    publishing {
-        publications {
-            withType<MavenPublication> {
-                pom {
-                    developers {
-                        developer {
-                            name.set("Danilo Pianini")
-                            email.set("danilo.pianini@gmail.com")
-                            url.set("http://www.danilopianini.org/")
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
