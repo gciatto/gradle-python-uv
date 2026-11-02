@@ -77,29 +77,30 @@ class UvProvisioningTest :
         }
 
         "uv should be found in well-known locations, when missing from PATH" {
+            val platform = HostPlatform.current
             val home = createTempDirectory("uv-home").toFile()
-            val uv = home.resolve(".local/bin/uv").apply {
+            val uv = home.resolve(".local/bin/${platform.executableName}").apply {
                 parentFile.mkdirs()
                 writeText("#!/bin/sh\n")
                 setExecutable(true)
             }
-            val linux = HostPlatform(Os.LINUX, "x86_64")
-            val locator = UvLocator(linux, mapOf("PATH" to "/nonexistent"), home, systemDirectories = emptyList())
+            val locator = UvLocator(platform, mapOf("PATH" to "/nonexistent"), home, systemDirectories = emptyList())
             locator.find() shouldBe uv.absoluteFile
-            // non-executable files are ignored
-            uv.setExecutable(false)
-            locator.find() shouldBe null
+            if (!platform.isWindows) {
+                uv.setExecutable(false) shouldBe true
+                locator.find() shouldBe null
+            }
         }
 
         "explicit executables may be paths or command names" {
+            val platform = HostPlatform.current
             val root = createTempDirectory("uv-explicit").toFile()
-            val custom = root.resolve("tools/my-uv").apply {
+            val custom = root.resolve("tools/${platform.executable("my-uv")}").apply {
                 parentFile.mkdirs()
                 writeText("#!/bin/sh\n")
                 setExecutable(true)
             }
-            val linux = HostPlatform(Os.LINUX, "x86_64")
-            val locator = UvLocator(linux, mapOf("PATH" to custom.parent), root.resolve("home"))
+            val locator = UvLocator(platform, mapOf("PATH" to custom.parent), root.resolve("home"))
             locator.resolve("tools/my-uv", root) shouldBe custom
             locator.resolve(custom.absolutePath, File("/")) shouldBe custom
             locator.resolve("my-uv", root) shouldBe custom.absoluteFile
