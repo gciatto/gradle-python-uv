@@ -18,11 +18,11 @@ jobs:
       # Only on Linux: on Windows and macOS, the plugin downloads uv by itself (testing provisioning)
       - name: Install uv
         if: runner.os == 'Linux'
-        uses: astral-sh/setup-uv@v10.3.0
+        uses: astral-sh/setup-uv@v10.3.3
         with:
           enable-cache: true
           cache-dependency-glob: '**/pyproject.toml'
-      - uses: DanySK/build-check-deploy-gradle-action@4.0.49
+      - uses: DanySK/build-check-deploy-gradle-action@4.0.50
         with:
           should-run-codecov: false
           should-deploy: false
@@ -47,7 +47,7 @@ jobs:
         uses: actions/setup-node@v7.1.0
         with:
           node-version-file: package.json
-      - uses: DanySK/build-check-deploy-gradle-action@4.0.49
+      - uses: DanySK/build-check-deploy-gradle-action@4.0.50
         with:
           retries-on-failure: '1'
           build-command: true

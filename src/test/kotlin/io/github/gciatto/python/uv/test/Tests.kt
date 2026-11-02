@@ -20,10 +20,12 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class Tests : StringSpec({
-    val scan = ClassGraph().enableAllInfo().acceptPackages(Tests::class.java.`package`.name).scan()
-    scan.getResourcesWithLeafName("test.yaml").flatMap { resource ->
+    val scan = ClassGraph().enableClasspath().acceptPackages(Tests::class.java.`package`.name).scan()
+    val resources = scan.getResourcesWithLeafName("test.yaml")
+    check(resources.isNotEmpty()) { "No functional test fixtures found" }
+    resources.flatMap { resource ->
         log.debug("Found test list in {}", resource)
-        val yamlFile = File(resource.classpathElementFile.absolutePath + "/" + resource.path)
+        val yamlFile = checkNotNull(resource.classpathElementFile).resolve(resource.path)
         val testConfiguration = Config { addSpec(Root) }.from.yaml.inputStream(resource.open())
         testConfiguration[Root.tests].map { it to yamlFile.parentFile }
     }.forEach { (test, location) ->

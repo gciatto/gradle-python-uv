@@ -30,6 +30,16 @@
    ],
    "packageRules": [
       {
+         "description": "Keep the default tools compatible with Python 3.10; coverage 7.17 requires Python 3.11",
+         "matchPackageNames": ["coverage"],
+         "allowedVersions": "<7.17.0"
+      },
+      {
+         "description": "Keep tests compatible with Java 17; ClassGraph 6 requires Java 25",
+         "matchPackageNames": ["io.github.classgraph:classgraph"],
+         "allowedVersions": "<6.0.0"
+      },
+      {
          "description": "Python dependencies of test fixtures are pinned on purpose",
          "matchFileNames": [
             "src/test/resources/**"

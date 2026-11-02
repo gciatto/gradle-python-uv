@@ -6,7 +6,7 @@ kotlin = "2.4.21"
 
 [libraries]
 apache-commons-lang3 = "org.apache.commons:commons-lang3:3.21.0"
-classgraph = "io.github.classgraph:classgraph:4.8.199"
+classgraph = "io.github.classgraph:classgraph:5.0.1"
 tomlj = "org.tomlj:tomlj:2.2.0"
 konf-yaml = { module = "com.uchuhimo:konf-yaml", version.ref = "konf" }
 kotest-junit5-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
@@ -17,9 +17,9 @@ kotlin-testing = [ "kotest-junit5-jvm", "kotest-assertions-core-jvm" ]
 
 [plugins]
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-gitSemVer = "org.danilopianini.git-sensitive-semantic-versioning:7.0.25"
+gitSemVer = "org.danilopianini.git-sensitive-semantic-versioning:7.2.0"
 gradlePluginPublish = "com.gradle.plugin-publish:2.2.1"
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-qa = "org.danilopianini.gradle-kotlin-qa:1.10.1"
-multiJvmTesting = "org.danilopianini.multi-jvm-test-plugin:4.5.10"
+kotlin-qa = "org.danilopianini.gradle-kotlin-qa:1.10.2"
+multiJvmTesting = "org.danilopianini.multi-jvm-test-plugin:4.5.11"
 taskTree = "com.dorongold.task-tree:4.0.2"

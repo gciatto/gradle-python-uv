@@ -12,7 +12,7 @@ import org.gradle.api.provider.Provider
  */
 internal object Conventions {
     /** The uv version downloaded when no uv is installed (updated by Renovate). */
-    const val DEFAULT_UV_VERSION = "0.13.1"
+    const val DEFAULT_UV_VERSION = "0.13.6"
 
     private const val DEFAULT_INDEX_URL = "https://pypi.org/simple"
 
@@ -24,11 +24,11 @@ internal object Conventions {
 
     private val devDependencies =
         listOf(
-            "coverage>=7.14.0",
-            "mypy>=2.1.0",
-            "poethepoet>=0.45.0",
+            "coverage>=7.16.2",
+            "mypy>=2.4.1",
+            "poethepoet>=0.49.0",
             "pytest>=9.0.3",
-            "ruff>=0.15.12",
+            "ruff>=0.17.3",
         )
 
     private val minimumPythonRegex = Regex(""">=\s*3\.(\d+)""")

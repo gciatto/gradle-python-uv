@@ -153,7 +153,7 @@ python {
 python {
     uvExecutable = "/opt/uv/bin/uv"                  // default: unset (see "uv provisioning")
     uvProvisioning = UvProvisioning.ALWAYS           // import io.github.gciatto.python.uv.UvProvisioning
-    uvVersion = "0.13.1"
+    uvVersion = "0.13.6"
     pythonVersion = "3.12"                           // default: content of .python-version
     testedPythonVersions("3.10", "3.11", "3.12", "3.13")
     pyprojectFile = layout.projectDirectory.file("pyproject.toml")
