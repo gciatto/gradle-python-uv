@@ -27,7 +27,7 @@ internal object Conventions {
             "coverage>=7.16.2",
             "mypy>=2.4.1",
             "poethepoet>=0.49.0",
-            "pytest>=9.0.3",
+            "pytest>=9.1.1",
             "ruff>=0.17.3",
         )
 
