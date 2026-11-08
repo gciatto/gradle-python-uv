@@ -1,3 +1,13 @@
+## [1.0.2](https://github.com/gciatto/gradle-python-uv/compare/1.0.1...1.0.2) (2026-11-08)
+
+### Dependency updates
+
+* **deps:** update plugin gitsemver to v7.3.0 ([#30](https://github.com/gciatto/gradle-python-uv/issues/30)) ([1ae9197](https://github.com/gciatto/gradle-python-uv/commit/1ae919740f6e370cce094e258e7b2dca2ccf9cdb))
+
+### Documentation
+
+* **deps:** update dependency org.jetbrains.dokka to v2.3.0 ([#37](https://github.com/gciatto/gradle-python-uv/issues/37)) ([4c11dc6](https://github.com/gciatto/gradle-python-uv/commit/4c11dc6dd14ac77bfbdd8a0c8442568930ccb094))
+
 ## [1.0.1](https://github.com/gciatto/gradle-python-uv/compare/1.0.0...1.0.1) (2026-11-08)
 
 ### Dependency updates
