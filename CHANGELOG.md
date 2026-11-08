@@ -1,3 +1,18 @@
+## [1.0.1](https://github.com/gciatto/gradle-python-uv/compare/1.0.0...1.0.1) (2026-11-08)
+
+### Dependency updates
+
+* **core-deps:** update gradle to v9.9.0 ([#36](https://github.com/gciatto/gradle-python-uv/issues/36)) ([ad5974b](https://github.com/gciatto/gradle-python-uv/commit/ad5974b5feb35b1523af2d4aad725bccba014600))
+* **deps:** update compatible build and Python dependencies ([4b0761a](https://github.com/gciatto/gradle-python-uv/commit/4b0761a702ae30bf3320dc7205a367ada6c8c163))
+* **deps:** update dependency io.github.classgraph:classgraph to v5.0.2 ([#34](https://github.com/gciatto/gradle-python-uv/issues/34)) ([349b8e3](https://github.com/gciatto/gradle-python-uv/commit/349b8e3ec91724fd375d05c76e72276c7026a9d4))
+* **deps:** update dependency pytest to v9.2.0 ([#29](https://github.com/gciatto/gradle-python-uv/issues/29)) ([e126008](https://github.com/gciatto/gradle-python-uv/commit/e12600872b18d3c934374f97fc8867aefbadb676))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.158 ([#35](https://github.com/gciatto/gradle-python-uv/issues/35)) ([8dc405d](https://github.com/gciatto/gradle-python-uv/commit/8dc405d98c8c48e06237d1d1dea6de40038dcca3))
+* **deps:** update dependency uv to v0.13.7 ([#20](https://github.com/gciatto/gradle-python-uv/issues/20)) ([abd88d6](https://github.com/gciatto/gradle-python-uv/commit/abd88d62bbf38c3efa5ccb981cd83767229728b7))
+
+### Build and continuous integration
+
+* **deps:** update danysk/build-check-deploy-gradle-action action to v4.0.51 ([#27](https://github.com/gciatto/gradle-python-uv/issues/27)) ([005cfa0](https://github.com/gciatto/gradle-python-uv/commit/005cfa0e735801d2071700d6ab3c08fc8ade0f95))
+
 ## 1.0.0 (2026-11-02)
 
 ### Features
