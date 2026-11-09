@@ -28,7 +28,7 @@ internal object Conventions {
             "mypy>=2.4.1",
             "poethepoet>=0.49.0",
             "pytest>=9.2.0",
-            "ruff>=0.17.3",
+            "ruff>=0.17.4",
         )
 
     private val minimumPythonRegex = Regex(""">=\s*3\.(\d+)""")
