@@ -1,3 +1,16 @@
+## [1.0.3](https://github.com/gciatto/gradle-python-uv/compare/1.0.2...1.0.3) (2026-11-11)
+
+### Dependency updates
+
+* **core-deps:** update gradle to v9.9.1 ([#38](https://github.com/gciatto/gradle-python-uv/issues/38)) ([24beb39](https://github.com/gciatto/gradle-python-uv/commit/24beb39ad6d026ea7ae0c5eb5536d5eb72df802c))
+* **deps:** update dependency ruff to v0.17.4 ([#13](https://github.com/gciatto/gradle-python-uv/issues/13)) ([b1db10a](https://github.com/gciatto/gradle-python-uv/commit/b1db10ada88b2decc6e822faea1c9136e290676b))
+* **deps:** update node.js to v26 ([#31](https://github.com/gciatto/gradle-python-uv/issues/31)) ([816f289](https://github.com/gciatto/gradle-python-uv/commit/816f2894ff30629706eefb4da3743a35b728cf17))
+
+### Build and continuous integration
+
+* **deps:** update dependency macos github actions runner to v26 ([#32](https://github.com/gciatto/gradle-python-uv/issues/32)) ([602eb64](https://github.com/gciatto/gradle-python-uv/commit/602eb644ba62439325cba37144411dcaa090924d))
+* **deps:** update dependency ubuntu github actions runner to v26 ([#33](https://github.com/gciatto/gradle-python-uv/issues/33)) ([e5b97c3](https://github.com/gciatto/gradle-python-uv/commit/e5b97c3bb725660b87af4366fcf855ec5d45d635))
+
 ## [1.0.2](https://github.com/gciatto/gradle-python-uv/compare/1.0.1...1.0.2) (2026-11-08)
 
 ### Dependency updates
