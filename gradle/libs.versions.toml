@@ -5,7 +5,7 @@ kotest = "6.2.7"
 kotlin = "2.4.21"
 
 [libraries]
-apache-commons-lang3 = "org.apache.commons:commons-lang3:3.21.0"
+apache-commons-lang3 = "org.apache.commons:commons-lang3:3.22.0"
 classgraph = "io.github.classgraph:classgraph:5.0.2"
 tomlj = "org.tomlj:tomlj:2.2.0"
 konf-yaml = { module = "com.uchuhimo:konf-yaml", version.ref = "konf" }
