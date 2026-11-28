@@ -1,3 +1,15 @@
+## [1.0.5](https://github.com/gciatto/gradle-python-uv/compare/1.0.4...1.0.5) (2026-11-28)
+
+### Dependency updates
+
+* **core-deps:** update gradle to v9.9.3 ([#50](https://github.com/gciatto/gradle-python-uv/issues/50)) ([8f5bcff](https://github.com/gciatto/gradle-python-uv/commit/8f5bcffefd063e5d88c41728cf2ab728cd876e27))
+* **deps:** update dependency ruff to v0.17.6 ([#49](https://github.com/gciatto/gradle-python-uv/issues/49)) ([d79db26](https://github.com/gciatto/gradle-python-uv/commit/d79db269b36af13a8d8153108e4110c572addf91))
+* **deps:** update dependency uv to v0.13.9 ([#46](https://github.com/gciatto/gradle-python-uv/issues/46)) ([ddff664](https://github.com/gciatto/gradle-python-uv/commit/ddff66490d533d1f4b5572e816aba9aa47fd0fc6))
+
+### Build and continuous integration
+
+* **deps:** update astral-sh/setup-uv action to v10.4.0 ([#47](https://github.com/gciatto/gradle-python-uv/issues/47)) ([7137f69](https://github.com/gciatto/gradle-python-uv/commit/7137f69c3eccd83c07b1fb265551c6ea9d96a969))
+
 ## [1.0.4](https://github.com/gciatto/gradle-python-uv/compare/1.0.3...1.0.4) (2026-11-20)
 
 ### Dependency updates
